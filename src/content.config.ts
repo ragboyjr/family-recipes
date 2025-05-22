@@ -23,4 +23,21 @@ const blog = defineCollection({
     }),
 });
 
-export const collections = { blog };
+const recipe = defineCollection({
+  loader: glob({
+    pattern: "{ingredients,meals,recipes}/**/[^_]*.md",
+    base: "./src/data",
+  }),
+  schema: () =>
+    z.object({
+      title: z.string(),
+      ingredients: z.optional(
+        z.union([
+          z.array(z.string()),
+          z.record(z.string(), z.array(z.string())),
+        ])
+      ),
+    }),
+});
+
+export const collections = { blog, recipe };
